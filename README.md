@@ -13,7 +13,13 @@
 
 # Install
 
-For both intel and Apple silicon:
+Via `go install`
+
+```shell
+go install github.com/TheDen/gcopy@latest
+```
+
+Or if you want to download the latest binary for both intel and Apple silicon:
 
 ```shell
 curl -sL -o gcopy 'https://github.com/TheDen/gcopy/releases/latest/download/gcopy' && chmod +x gcopy && mv gcopy /usr/local/bin/

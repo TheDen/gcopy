@@ -97,7 +97,6 @@ func main() {
 	if (stat.Mode() & os.ModeCharDevice) == 0 {
 		stdin, err := ioutil.ReadAll(os.Stdin)
 		check(err)
-		//		if filetype.IsImage(stdin) {
 		fileType = getfileTypeStdin(stdin)
 		tempfile := writTtempFile(stdin, fileType)
 		defer tempfile.Close()

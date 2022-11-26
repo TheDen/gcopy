@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
+	"io"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -33,7 +33,7 @@ func fileCheck(filePath string) {
 }
 
 func getfileType(absfileName string) string {
-	buf, _ := ioutil.ReadFile(absfileName)
+	buf, _ := os.ReadFile(absfileName)
 	kind, _ := filetype.Match(buf)
 	return kind.Extension
 }
@@ -95,13 +95,12 @@ func main() {
 
 	// stdin takes precedence over cli argument
 	if (stat.Mode() & os.ModeCharDevice) == 0 {
-		stdin, err := ioutil.ReadAll(os.Stdin)
+		stdin, err := io.ReadAll(os.Stdin)
 		check(err)
 		fileType = getfileTypeStdin(stdin)
 		tempfile := writTtempFile(stdin, fileType)
 		command = parseFile(tempfile.Name(), fileType)
 		runCommand(command)
-		fmt.Println(command)
 		tempfile.Close()
 		os.Remove(tempfile.Name())
 		os.Exit(0)

@@ -1,4 +1,4 @@
-module imgcopy
+module gcopy
 
 go 1.19
 

@@ -11,7 +11,7 @@
 ![gcopy](./gcopy.gif)
 
 
-# Installgi
+# Install
 
 For both intel and Apple silicon:
 

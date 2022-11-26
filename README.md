@@ -22,7 +22,7 @@ curl -sL -o gcopy 'https://github.com/TheDen/gcopy/releases/latest/download/gcop
 For specific architecture:
 
 * `https://github.com/TheDen/gcopy/releases/latest/download/gcopy-darwin-arm64` (Apple silicon)
-* `https://github.com/TheDen/gcopy/releases/latest/download/gcopy-darwin-amd64gi` (intel)
+* `https://github.com/TheDen/gcopy/releases/latest/download/gcopy-darwin-amd64` (intel)
 
 ## Usage
 

@@ -8,7 +8,10 @@
 * Written in Go, deployed as a universal static binary
 
 
-# Install
+![gcopy](./gcopy.gif)
+
+
+# Installgi
 
 For both intel and Apple silicon:
 

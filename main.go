@@ -99,10 +99,11 @@ func main() {
 		check(err)
 		fileType = getfileTypeStdin(stdin)
 		tempfile := writTtempFile(stdin, fileType)
-		defer tempfile.Close()
-		defer os.Remove(tempfile.Name())
 		command = parseFile(tempfile.Name(), fileType)
 		runCommand(command)
+		fmt.Println(command)
+		tempfile.Close()
+		os.Remove(tempfile.Name())
 		os.Exit(0)
 	}
 

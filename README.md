@@ -16,8 +16,13 @@
 For both intel and Apple silicon:
 
 ```shell
-curl -sLO 'https://github.com/TheDen/gcopy/releases/latest/download/gcopy' && chmod +x gcopy && mv gcopy /usr/local/bin/
+curl -sL -o gcopy 'https://github.com/TheDen/gcopy/releases/latest/download/gcopy' && chmod +x gcopy && mv gcopy /usr/local/bin/
 ```
+
+For specific archicture download
+
+* `https://github.com/TheDen/gcopy/releases/latest/download/gcopy-darwin-arm64` (Apple silicon)
+* `https://github.com/TheDen/gcopy/releases/latest/download/gcopy-darwin-amd64'` (intel)
 
 ## Usage
 

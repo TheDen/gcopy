@@ -1,7 +1,7 @@
 # gcopy
 
 
-`gcopy` (global copy) is a command line tool that copies data to your clipboard on MacOS. It's similar to `pbaste` but with some key differences
+`gcopy` (global copy) is a command line tool that copies data to your clipboard on MacOS. It's similar to `pbcopy` but with some key differences
 
 * Works with images, so copied images can be pasted
 * Accepts arbitrary `STDIN` via a pipe, or directly a file as an argument
@@ -36,3 +36,4 @@ Similarly for images
 ```shell
 gcopy image.png
 ```
+

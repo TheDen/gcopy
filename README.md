@@ -19,16 +19,16 @@ For both intel and Apple silicon:
 curl -sL -o gcopy 'https://github.com/TheDen/gcopy/releases/latest/download/gcopy' && chmod +x gcopy && mv gcopy /usr/local/bin/
 ```
 
-For specific archicture download
+For specific architecture:
 
 * `https://github.com/TheDen/gcopy/releases/latest/download/gcopy-darwin-arm64` (Apple silicon)
-* `https://github.com/TheDen/gcopy/releases/latest/download/gcopy-darwin-amd64` (intel)
+* `https://github.com/TheDen/gcopy/releases/latest/download/gcopy-darwin-amd64gi` (intel)
 
 ## Usage
 
 ### Copying to clipboard via pipes
 
-Works with ascii text or arbitrary data
+Works with text or arbitrary data
 
 ```shell
 cat main.go | gcopy

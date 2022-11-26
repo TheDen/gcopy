@@ -7,7 +7,7 @@
 * Accepts arbitrary `STDIN` via a pipe, or via filename passed as an argument
 * Written in Go, deployed as a universal static binary
 
-gi![gcopy](./gcopy.gif)
+![gcopy](./gcopy.gif)
 
 
 # Install

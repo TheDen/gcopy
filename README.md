@@ -7,6 +7,15 @@
 * Accepts arbitrary `STDIN` via a pipe, or directly a file as an argument
 * Written in Go, deployed as a universal static binary
 
+
+# Install
+
+For both intel and Apple silicon:
+
+```shell
+curl -sLO 'https://github.com/TheDen/gcopy/releases/latest/download/gcopy' && chmod +x gcopy && mv gcopy /usr/local/bin/
+```
+
 ## Usage
 
 ### Copying to clipboard via pipes
@@ -36,4 +45,3 @@ Similarly for images
 ```shell
 gcopy image.png
 ```
-

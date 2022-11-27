@@ -42,7 +42,6 @@ func fileCheck(filePath string) {
 	checkErrExit(err)
 	if fileInfo.IsDir() {
 		checkErrExit(err)
-
 	}
 }
 
@@ -114,11 +113,8 @@ func writeTempFile(stdin []byte, fileExtension string) *os.File {
 
 func main() {
 	parser := argparse.NewParser("gcopy [file] [STDIN]", "gcopy: copy content to the clipboard")
-	printVersion := parser.Flag(
-		"v", "version", &argparse.Options{
-			Help: "Current version",
-		},
-	)
+	printVersion := parser.Flag("v", "version", &argparse.Options{Help: "Current version"})
+	pathName := parser.Flag("p", "path", &argparse.Options{Help: "Copy (and show) the absolute path of a file or folder to the clipboard"})
 	var fileName *string = parser.StringPositional(&argparse.Options{Help: "DISABLEDDESCRIPTIONWILLNOTSHOWUP"})
 	parser.Parse(os.Args)
 
@@ -130,6 +126,15 @@ func main() {
 	var fileArg bool
 	if len(*fileName) > 0 {
 		fileArg = true
+	}
+
+	if *pathName && fileArg {
+		absfileName := getAbsfilename(*fileName)
+		fileCheck(absfileName)
+		command := fmt.Sprintf("set the clipboard to \"%s\"", absfileName)
+		fmt.Println(absfileName)
+		runCommand(command)
+		os.Exit(0)
 	}
 
 	stat, _ := os.Stdin.Stat()

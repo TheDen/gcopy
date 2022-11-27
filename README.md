@@ -31,19 +31,37 @@ For specific architecture:
 
 ## Usage
 
+```bash
+usage: gcopy [file] [STDIN] [-h|--help] [-v|--version] [-p|--path]
+
+                            gcopy: copy content to the clipboard
+
+Arguments:
+
+  -h  --help     Print help information
+  -v  --version  Current version
+  -p  --path     Copy (and show) the absolute pathname of a file or folder to
+                 the clipboard
+```
+
+
 ### Copying to clipboard via pipes
 
 Works with text or arbitrary data
 
 ```shell
 cat main.go | gcopy
+# or
+gcopy < main.go
 ```
 
-Images can also be copied via pipes, and then pasted as images
+Images can also be copied via pipes, and then pasted as images to GUI applications
 
 
 ```shell
 cat image.png | gcopy
+# or 
+gcopy < image.png
 ```
 
 ### Passing in files to copy to the clipboard
@@ -55,5 +73,12 @@ gcopy main.go
 Similarly for images
 
 ```shell
-gcopy image.png
+gcopy image.pnggi
+```
+
+### Getting the absolute path of a file or folder
+
+```shell
+gcopy -p .bashrc
+/Users/den/.bashrc
 ```

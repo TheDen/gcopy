@@ -11,7 +11,7 @@ It does what `pbcopy` does but with some extra features:
 * Has an optional flag to copy the absolute pathname of a file or folder to the clipboard
 * Written in Go, deployed as a multi-arch static binary
 
-![gcopy](./gcopy-usage-example.gif)g
+![gcopy](./gcopy-usage-example.gif)
 
 # Install
 

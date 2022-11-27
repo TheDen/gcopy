@@ -79,7 +79,7 @@ Similarly for images
 gcopy image.png
 ```
 
-Or any other type of files
+Or any other type of file
 
 ```shell
 gcopy backups.zip

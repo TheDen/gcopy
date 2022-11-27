@@ -66,6 +66,7 @@ func getfileClass(fileContent []byte) (string, string) {
 		case fileExtension == "gif":
 			fileClass = "GIF picture"
 		case fileExtension == "bmp":
+			// Extra space here is intentional
 			fileClass = "«class BMP »"
 		case fileExtension == "tif":
 			fileClass = "TIFF picture"

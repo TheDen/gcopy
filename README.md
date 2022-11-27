@@ -6,6 +6,7 @@
 * Works with images, so copied images can be pasted
 * Accepts arbitrary `STDIN` via a pipe, or via filename passed as an argument
 * Written in Go, deployed as a universal static binary
+* Has an optional flag to copy the absolute pathname of a file or folder to the clipboard
 
 ![gcopy](./gcopy.gif)
 

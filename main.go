@@ -6,14 +6,14 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"unicode/utf8"
 
 	"github.com/h2non/filetype"
 )
 
 func check(err error) {
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "error: %v\n", err)
-		os.Exit(1)
+		panic(err)
 	}
 }
 
@@ -27,41 +27,48 @@ func fileCheck(filePath string) {
 	fileInfo, err := os.Stat(filePath)
 	check(err)
 	if fileInfo.IsDir() {
-		fmt.Fprintf(os.Stderr, "error: %s is a directory\n", filePath)
-		os.Exit(1)
+		panic(err)
 	}
 }
 
-func getfileType(absfileName string) string {
-	buf, _ := os.ReadFile(absfileName)
-	kind, _ := filetype.Match(buf)
-	return kind.Extension
+func cleanup(tempfile *os.File) int {
+	tempfile.Close()
+	os.Remove(tempfile.Name())
+	return 0
 }
 
-func getfileTypeStdin(stdin []byte) string {
-	kind, _ := filetype.Match(stdin)
-	return kind.Extension
-}
+func getfileClass(fileContent []byte) (string, string) {
+	kind, err := filetype.Match(fileContent)
+	check(err)
+	fileExtension := kind.Extension
+	isImage := filetype.IsImage(fileContent)
 
-func setfileClass(fileType string) string {
 	var fileClass = ""
-	switch {
-	case fileType == "png":
-		fileClass = "«class PNGf»"
-	case fileType == "jpg":
-		fileClass = "JPEG picture"
-	case fileType == "gif":
-		fileClass = "GIF picture"
-	case fileType == "bmp":
-		fileClass = "«class BMPf»"
+	if isImage {
+		switch {
+		case fileExtension == "png":
+			fileClass = "«class PNGf»"
+		case fileExtension == "jpg":
+			fileClass = "JPEG picture"
+		case fileExtension == "gif":
+			fileClass = "GIF picture"
+		case fileExtension == "bmp":
+			fileClass = "«class BMP »"
+		case fileExtension == "tif":
+			fileClass = "TIFF picture"
+		}
+	} else {
+		// Check if file is utf8 encoded
+		if utf8.Valid(fileContent) {
+			fileClass = "«class utf8»"
+		}
 	}
-	return fileClass
+	return fileClass, fileExtension
 }
 
-func parseFile(absfileName string, fileType string) string {
-	fileClass := setfileClass(fileType)
+func createCommand(absfileName string, fileClass string) string {
 	var command = ""
-	if len(fileClass) > 0 && (len(absfileName) > 0) {
+	if len(fileClass) > 0 {
 		command = fmt.Sprintf("set the clipboard to (read (POSIX file \"%s\") as %s)", absfileName, fileClass)
 	} else {
 		command = fmt.Sprintf("set the clipboard to (read (POSIX file \"%s\"))", absfileName)
@@ -70,13 +77,21 @@ func parseFile(absfileName string, fileType string) string {
 }
 
 func runCommand(command string) {
+	defer func() {
+		if r := recover(); r != nil {
+			// Unable to cooy the data to clipboard, do nothing
+		}
+	}()
 	cmd := exec.Command("osascript", "-e", command)
-	_, err := cmd.CombinedOutput()
+	output, err := cmd.CombinedOutput()
+	if len(output) > 0 {
+		err = fmt.Errorf("%w; %s", err, string(output))
+	}
 	check(err)
 }
 
-func writTtempFile(stdin []byte, fileType string) *os.File {
-	f, err := os.CreateTemp("", fmt.Sprintf("tmpfile-*.%s", fileType))
+func writTtempFile(stdin []byte, fileExtension string) *os.File {
+	f, err := os.CreateTemp("", fmt.Sprintf("tmpfile-*.%s", fileExtension))
 	check(err)
 	_, err = f.Write(stdin)
 	check(err)
@@ -91,28 +106,28 @@ func main() {
 	}
 
 	var command = ""
-	var fileType = ""
 
 	// stdin takes precedence over cli argument
 	if (stat.Mode() & os.ModeCharDevice) == 0 {
 		stdin, err := io.ReadAll(os.Stdin)
 		check(err)
-		fileType = getfileTypeStdin(stdin)
-		tempfile := writTtempFile(stdin, fileType)
-		command = parseFile(tempfile.Name(), fileType)
+		fileClass, fileExtension := getfileClass(stdin)
+		tempfile := writTtempFile(stdin, fileExtension)
+		command = createCommand(tempfile.Name(), fileClass)
+		defer tempfile.Close()
+		defer os.Remove(tempfile.Name())
 		runCommand(command)
-		tempfile.Close()
-		os.Remove(tempfile.Name())
-		os.Exit(0)
+		os.Exit(cleanup(tempfile))
 	}
-
 	// Check for argument, expecting a file
 	if len(os.Args) > 1 {
 		fileName := os.Args[1]
 		absfileName := getAbsfilename(fileName)
 		fileCheck(absfileName)
-		fileType = getfileType(absfileName)
-		command = parseFile(absfileName, fileType)
+		fileContent, err := os.ReadFile(absfileName)
+		check(err)
+		fileClass, _ := getfileClass(fileContent)
+		command = createCommand(absfileName, fileClass)
 		runCommand(command)
 		os.Exit(0)
 	}

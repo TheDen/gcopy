@@ -9,9 +9,9 @@
 * Has an optional flag to copy the absolute pathname of a file or folder to the clipboard
 * Written in Go, deployed as a multi-arch static binary
 
-![gcopy](./gcopy-usage.gif)
+![gcopy](./gcopy-usage-example.gif)
 
-
+g
 # Install
 
 Via `go install`

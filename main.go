@@ -8,26 +8,41 @@ import (
 	"path/filepath"
 	"unicode/utf8"
 
+	_ "embed"
+
+	"github.com/akamensky/argparse"
 	"github.com/h2non/filetype"
 )
 
-func check(err error) {
+//go:generate bash get_version.sh
+//go:embed version.txt
+var version string
+
+func checkPanic(err error) {
 	if err != nil {
 		panic(err)
 	}
 }
 
+func checkErrExit(err error) {
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "error: %v\n", err)
+		os.Exit(1)
+	}
+}
+
 func getAbsfilename(fileName string) string {
 	absfileName, err := filepath.Abs(fileName)
-	check(err)
+	checkErrExit(err)
 	return absfileName
 }
 
 func fileCheck(filePath string) {
 	fileInfo, err := os.Stat(filePath)
-	check(err)
+	checkErrExit(err)
 	if fileInfo.IsDir() {
-		panic(err)
+		checkErrExit(err)
+
 	}
 }
 
@@ -38,8 +53,7 @@ func cleanup(tempfile *os.File) int {
 }
 
 func getfileClass(fileContent []byte) (string, string) {
-	kind, err := filetype.Match(fileContent)
-	check(err)
+	kind, _ := filetype.Match(fileContent)
 	fileExtension := kind.Extension
 	isImage := filetype.IsImage(fileContent)
 
@@ -87,32 +101,49 @@ func runCommand(command string) {
 	if len(output) > 0 {
 		err = fmt.Errorf("%w; %s", err, string(output))
 	}
-	check(err)
+	checkPanic(err)
 }
 
-func writTtempFile(stdin []byte, fileExtension string) *os.File {
+func writeTempFile(stdin []byte, fileExtension string) *os.File {
 	f, err := os.CreateTemp("", fmt.Sprintf("tmpfile-*.%s", fileExtension))
-	check(err)
+	checkPanic(err)
 	_, err = f.Write(stdin)
-	check(err)
+	checkPanic(err)
 	return f
 }
 
 func main() {
+	parser := argparse.NewParser("gcopy [file] [STDIN]", "gcopy: copy content to the clipboard")
+	printVersion := parser.Flag(
+		"v", "version", &argparse.Options{
+			Help: "Current version",
+		},
+	)
+	var fileName *string = parser.StringPositional(&argparse.Options{Help: "DISABLEDDESCRIPTIONWILLNOTSHOWUP"})
+	parser.Parse(os.Args)
+
+	if *printVersion {
+		fmt.Print("build version: ", version)
+		os.Exit(0)
+	}
+
+	var fileArg bool
+	if len(*fileName) > 0 {
+		fileArg = true
+	}
+
 	stat, _ := os.Stdin.Stat()
-	// Exit if nothing is passed in
-	if len(os.Args) <= 1 && ((stat.Mode() & os.ModeCharDevice) != 0) {
+	if !fileArg && ((stat.Mode() & os.ModeCharDevice) != 0) {
 		os.Exit(0)
 	}
 
 	var command = ""
-
-	// stdin takes precedence over cli argument
+	// stdin takes precedence over positional argument
 	if (stat.Mode() & os.ModeCharDevice) == 0 {
 		stdin, err := io.ReadAll(os.Stdin)
-		check(err)
+		checkErrExit(err)
 		fileClass, fileExtension := getfileClass(stdin)
-		tempfile := writTtempFile(stdin, fileExtension)
+		tempfile := writeTempFile(stdin, fileExtension)
 		command = createCommand(tempfile.Name(), fileClass)
 		defer tempfile.Close()
 		defer os.Remove(tempfile.Name())
@@ -120,12 +151,11 @@ func main() {
 		os.Exit(cleanup(tempfile))
 	}
 	// Check for argument, expecting a file
-	if len(os.Args) > 1 {
-		fileName := os.Args[1]
-		absfileName := getAbsfilename(fileName)
+	if fileArg {
+		absfileName := getAbsfilename(*fileName)
 		fileCheck(absfileName)
 		fileContent, err := os.ReadFile(absfileName)
-		check(err)
+		checkErrExit(err)
 		fileClass, _ := getfileClass(fileContent)
 		command = createCommand(absfileName, fileClass)
 		runCommand(command)

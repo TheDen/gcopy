@@ -3,10 +3,11 @@
 
 `gcopy` (global copy) is a command line tool that copies data to your clipboard on MacOS. It's similar to `pbcopy` but with some key differences
 
-* Works with images, so copied images can be pasted
-* Accepts arbitrary `STDIN` via a pipe, or via filename passed as an argument
-* Written in Go, deployed as a universal static binary
+* Works with images, so copied images can be pasted in other applications
+* Accepts arbitrary `STDIN` via a pipe
+* If a filename is passed as an argument it'll copy the data as though you hit `CMD+C` via `Finder`, allowing pasting of files (PDFs, archive files, videos etc.) to other programs
 * Has an optional flag to copy the absolute pathname of a file or folder to the clipboard
+* Written in Go, deployed as a multi-arch static binary
 
 ![gcopy](./gcopy.gif)
 
@@ -74,8 +75,17 @@ gcopy main.go
 Similarly for images
 
 ```shell
-gcopy image.pnggi
+gcopy image.png
 ```
+
+Or any other type of file
+
+```shell
+gcopy backups.zip
+```
+
+Copying via this method will allow you to paste non-text data in other applications
+
 
 ## Getting the absolute path of a file or folder
 

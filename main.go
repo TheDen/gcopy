@@ -80,14 +80,15 @@ func getfileClass(fileContent []byte) (string, string) {
 	return fileClass, fileExtension
 }
 
-func createCommand(absfileName string, fileClass string) string {
-	var command = ""
+func createCommand(absfileName string, fileClass string, rawData bool) string {
 	if len(fileClass) > 0 {
-		command = fmt.Sprintf("set the clipboard to (read (POSIX file \"%s\") as %s)", absfileName, fileClass)
-	} else {
-		command = fmt.Sprintf("set the clipboard to (read (POSIX file \"%s\"))", absfileName)
+		return fmt.Sprintf("set the clipboard to (read (POSIX file \"%s\") as %s)", absfileName, fileClass)
 	}
-	return command
+	if rawData {
+		return fmt.Sprintf("set the clipboard to (read (POSIX file \"%s\"))", absfileName)
+	} else {
+		return fmt.Sprintf("tell application \"Finder\" to set the clipboard to (POSIX file \"%s\")", absfileName)
+	}
 }
 
 func runCommand(command string) {
@@ -150,7 +151,7 @@ func main() {
 		checkErrExit(err)
 		fileClass, fileExtension := getfileClass(stdin)
 		tempfile := writeTempFile(stdin, fileExtension)
-		command = createCommand(tempfile.Name(), fileClass)
+		command = createCommand(tempfile.Name(), fileClass, true)
 		defer tempfile.Close()
 		defer os.Remove(tempfile.Name())
 		runCommand(command)
@@ -160,10 +161,7 @@ func main() {
 	if fileArg {
 		absfileName := getAbsfilename(*fileName)
 		fileCheck(absfileName)
-		fileContent, err := os.ReadFile(absfileName)
-		checkErrExit(err)
-		fileClass, _ := getfileClass(fileContent)
-		command = createCommand(absfileName, fileClass)
+		command = createCommand(absfileName, "", false)
 		runCommand(command)
 		os.Exit(0)
 	}

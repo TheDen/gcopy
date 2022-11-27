@@ -9,7 +9,7 @@
 * Has an optional flag to copy the absolute pathname of a file or folder to the clipboard
 * Written in Go, deployed as a multi-arch static binary
 
-![gcopy](./gcopy.gif)
+![gcopy](./gcopy-usage.gif)
 
 
 # Install
@@ -78,7 +78,7 @@ Similarly for images
 gcopy image.png
 ```
 
-Or any other type of file
+Or any other type of gifile
 
 ```shell
 gcopy backups.zip

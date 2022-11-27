@@ -30,7 +30,7 @@ For specific architecture:
 * `https://github.com/TheDen/gcopy/releases/latest/download/gcopy-darwin-arm64` (Apple silicon)
 * `https://github.com/TheDen/gcopy/releases/latest/download/gcopy-darwin-amd64` (intel)
 
-## Usage
+# Usage
 
 ```bash
 usage: gcopy [file] [STDIN] [-h|--help] [-v|--version] [-p|--path]
@@ -46,7 +46,7 @@ Arguments:
 ```
 
 
-### Copying to clipboard via pipes
+## Copying to clipboard via STDIN
 
 Works with text or arbitrary data
 
@@ -65,7 +65,7 @@ cat image.png | gcopy
 gcopy < image.png
 ```
 
-### Passing in files to copy to the clipboard
+## Passing in files to copy to the clipboard
 
 ```shell
 gcopy main.go
@@ -77,7 +77,7 @@ Similarly for images
 gcopy image.pnggi
 ```
 
-### Getting the absolute path of a file or folder
+## Getting the absolute path of a file or folder
 
 ```shell
 gcopy -p .bashrc

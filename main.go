@@ -3,9 +3,11 @@ package main
 import (
 	"fmt"
 	"io"
+	"log"
 	"os"
 	"os/exec"
 	"path/filepath"
+	"strings"
 	"unicode/utf8"
 
 	_ "embed"
@@ -14,35 +16,33 @@ import (
 	"github.com/h2non/filetype"
 )
 
+const (
+	pngFileType  = "png"
+	jpgFileType  = "jpg"
+	gifFileType  = "gif"
+	bmpFileType  = "bmp"
+	tiffFileType = "tif"
+)
+
 //go:generate bash get_version.sh
 //go:embed version.txt
 var version string
 
-func checkPanic(err error) {
+func exitOnError(err error) {
 	if err != nil {
-		panic(err)
-	}
-}
-
-func checkErrExit(err error) {
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "error: %v\n", err)
-		os.Exit(1)
+		log.Fatal(err)
 	}
 }
 
 func getAbsfilename(fileName string) string {
 	absfileName, err := filepath.Abs(fileName)
-	checkErrExit(err)
+	exitOnError(err)
 	return absfileName
 }
 
-func fileCheck(filePath string) {
-	fileInfo, err := os.Stat(filePath)
-	checkErrExit(err)
-	if fileInfo.IsDir() {
-		checkErrExit(err)
-	}
+func validateFile(filePath string) {
+	_, err := os.Stat(filePath)
+	exitOnError(err)
 }
 
 func cleanup(tempfile *os.File) int {
@@ -51,26 +51,27 @@ func cleanup(tempfile *os.File) int {
 	return 0
 }
 
-func getfileClass(fileContent []byte) (string, string) {
+func getFileClass(fileContent []byte) (string, string) {
 	kind, _ := filetype.Match(fileContent)
 	fileExtension := kind.Extension
 	isImage := filetype.IsImage(fileContent)
 
 	var fileClass = ""
 	if isImage {
-		switch {
-		case fileExtension == "png":
+		switch strings.ToLower(fileExtension) {
+		case pngFileType:
 			fileClass = "«class PNGf»"
-		case fileExtension == "jpg":
+		case jpgFileType:
 			fileClass = "JPEG picture"
-		case fileExtension == "gif":
+		case gifFileType:
 			fileClass = "GIF picture"
-		case fileExtension == "bmp":
+		case bmpFileType:
 			// Extra space here is intentional
 			fileClass = "«class BMP »"
-		case fileExtension == "tif":
+		case tiffFileType:
 			fileClass = "TIFF picture"
 		}
+
 	} else {
 		// Check if file is utf8 encoded
 		if utf8.Valid(fileContent) {
@@ -80,15 +81,15 @@ func getfileClass(fileContent []byte) (string, string) {
 	return fileClass, fileExtension
 }
 
-func createCommand(absfileName string, fileClass string, rawData bool) string {
+func createCommand(absfileName string, fileClass string, rawData bool) (command string) {
 	if len(fileClass) > 0 {
-		return fmt.Sprintf("set the clipboard to (read (POSIX file \"%s\") as %s)", absfileName, fileClass)
-	}
-	if rawData {
-		return fmt.Sprintf("set the clipboard to (read (POSIX file \"%s\"))", absfileName)
+		command = fmt.Sprintf("set the clipboard to (read (POSIX file \"%s\") as %s)", absfileName, fileClass)
+	} else if rawData {
+		command = fmt.Sprintf("set the clipboard to (read (POSIX file \"%s\"))", absfileName)
 	} else {
-		return fmt.Sprintf("tell application \"Finder\" to set the clipboard to (POSIX file \"%s\")", absfileName)
+		command = fmt.Sprintf("tell application \"Finder\" to set the clipboard to (POSIX file \"%s\")", absfileName)
 	}
+	return
 }
 
 func runCommand(command string) {
@@ -102,14 +103,14 @@ func runCommand(command string) {
 	if len(output) > 0 {
 		err = fmt.Errorf("%w; %s", err, string(output))
 	}
-	checkPanic(err)
+	exitOnError(err)
 }
 
 func writeTempFile(stdin []byte, fileExtension string) *os.File {
 	f, err := os.CreateTemp("", fmt.Sprintf("tmpfile-*.%s", fileExtension))
-	checkPanic(err)
+	exitOnError(err)
 	_, err = f.Write(stdin)
-	checkPanic(err)
+	exitOnError(err)
 	return f
 }
 
@@ -132,14 +133,15 @@ func main() {
 
 	if *pathName && fileArg {
 		absfileName := getAbsfilename(*fileName)
-		fileCheck(absfileName)
+		validateFile(absfileName)
 		command := fmt.Sprintf("set the clipboard to \"%s\"", absfileName)
 		fmt.Println(absfileName)
 		runCommand(command)
 		os.Exit(0)
 	}
 
-	stat, _ := os.Stdin.Stat()
+	stat, err := os.Stdin.Stat()
+	exitOnError(err)
 	if !fileArg && ((stat.Mode() & os.ModeCharDevice) != 0) {
 		os.Exit(0)
 	}
@@ -148,8 +150,8 @@ func main() {
 	// stdin takes precedence over positional argument
 	if (stat.Mode() & os.ModeCharDevice) == 0 {
 		stdin, err := io.ReadAll(os.Stdin)
-		checkErrExit(err)
-		fileClass, fileExtension := getfileClass(stdin)
+		exitOnError(err)
+		fileClass, fileExtension := getFileClass(stdin)
 		tempfile := writeTempFile(stdin, fileExtension)
 		command = createCommand(tempfile.Name(), fileClass, true)
 		defer tempfile.Close()
@@ -157,10 +159,10 @@ func main() {
 		runCommand(command)
 		os.Exit(cleanup(tempfile))
 	}
-	// Check for argument, expecting a file
+	// Argument expects file
 	if fileArg {
 		absfileName := getAbsfilename(*fileName)
-		fileCheck(absfileName)
+		validateFile(absfileName)
 		command = createCommand(absfileName, "", false)
 		runCommand(command)
 		os.Exit(0)

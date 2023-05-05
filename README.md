@@ -1,7 +1,7 @@
 # gcopy
 
 <p align="center">
-  <img alt="copy Logo" src=".github/logo.png" />
+  <img alt="copy Logo" src="https://raw.githubusercontent.com/TheDen/gcopy/main/.github/logo.png" />
 </p>
 
 <div align="center">
@@ -26,24 +26,24 @@ It does what `pbcopy` does but with some extra features:
 
 # Install
 
-Via `go install`
+## Via `go install`
 
 ```shell
 go install github.com/TheDen/gcopy@latest
 ```
 
-Or if you want to download the latest binary for both intel and Apple silicon:
+## Brew
+
+To install via `brew`
 
 ```shell
-curl -sL -o gcopy 'https://github.com/TheDen/gcopy/releases/latest/download/gcopy' && chmod +x gcopy && mv gcopy /usr/local/bin/
+brew tap theden/gcopy
+brew install gcopy
 ```
 
-For specific architecture:
-
-* `https://github.com/TheDen/gcopy/releases/latest/download/gcopy-darwin-arm64` (Apple silicon)
-* `https://github.com/TheDen/gcopy/releases/latest/download/gcopy-darwin-amd64` (intel)
-
 # Usage
+
+## Overview
 
 ```bash
 usage: gcopy [file] [STDIN] [-h|--help] [-v|--version] [-p|--path]

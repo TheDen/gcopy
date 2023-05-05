@@ -2,8 +2,9 @@
 
 <div align="center">
 
-![License](https://img.shields.io/github/license/TheDen/gcopy?style=flat-square)
-![GitHub Relase](https://img.shields.io/github/v/release/TheDen/gcopy?style=flat-square)
+[![License](https://img.shields.io/github/license/TheDen/gcopy?style=flat-square)](/LICENCE)
+[![GitHub Relase](https://img.shields.io/github/v/release/TheDen/gcopy?style=flat-square)](https://github.com/TheDen/gcopy/releases/latest)
+[![Go Doc](https://img.shields.io/badge/godoc-reference-blue.svg?style=flat-square)](https://pkg.go.dev/github.com/TheDen/gcopy)
 
 </div>
 

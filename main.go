@@ -95,7 +95,8 @@ func createCommand(absfileName string, fileClass string, rawData bool) (command 
 func runCommand(command string) {
 	defer func() {
 		if r := recover(); r != nil {
-			// Unable to cooy the data to clipboard, do nothing
+			// Unable to copy the data to clipboard, do nothing
+
 		}
 	}()
 	cmd := exec.Command("osascript", "-e", command)

@@ -1,5 +1,9 @@
 # gcopy
 
+<p align="center">
+  <img alt="copy Logo" src=".github/logo.png" />
+</p>
+
 <div align="center">
 
 [![License](https://img.shields.io/github/license/TheDen/gcopy?style=flat-square)](/LICENCE)

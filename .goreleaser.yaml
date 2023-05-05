@@ -1,30 +1,36 @@
-# This is an example .goreleaser.yml file with some sensible defaults.
-# Make sure to check the documentation at https://goreleaser.com
 before:
   hooks:
-    # You may remove this if you don't use go modules.
     - go mod tidy
-    # you may remove this if you don't need go generate
     - go generate ./...
 builds:
-  - env:
+  - binary: gcopy
+    env:
       - CGO_ENABLED=0
     goos:
       - darwin
-archives:
-  - replacements:
-      darwin: Darwin
-checksum:
-  name_template: 'checksums.txt'
-snapshot:
-  name_template: "{{ incpatch .Version }}-next"
+    goarch:
+      - amd64
+      - arm64
+    flags:
+      - -ldflags="-s -w"
+      - -mod=vendor
+universal_binaries:
+  - replace: true
+brews:
+  -
+    name: gcopy
+    homepage: "https://github.com/TheDen/gcopy"
+    tap:
+      owner: TheDen
+      name: homebrew-gcopy
+    commit_author:
+      name: TheDen
+      email: gcopy@theden.sh
 changelog:
   sort: asc
   filters:
     exclude:
       - '^docs:'
       - '^test:'
-
-# modelines, feel free to remove those if you don't want/use them:
-# yaml-language-server: $schema=https://goreleaser.com/static/schema.json
-# vim: set ts=2 sw=2 tw=0 fo=cnqoj
+checksum:
+  name_template: 'checksums.txt'

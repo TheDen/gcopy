@@ -12,7 +12,6 @@ builds:
       - amd64
       - arm64
     flags:
-      - -ldflags="-s -w"
       - -mod=vendor
 universal_binaries:
   - replace: true

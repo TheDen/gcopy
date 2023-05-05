@@ -1,5 +1,11 @@
 # gcopy
 
+<div align="center">
+
+![License](https://img.shields.io/github/license/TheDen/gcopy?style=flat-square)
+![GitHub Relase](https://img.shields.io/github/v/release/TheDen/gcopy?style=flat-square)
+
+</div>
 
 `gcopy` (global copy) is a command line tool that copies data to your clipboard on MacOS. 
 

@@ -21,6 +21,7 @@ It does what `pbcopy` does but with some extra features:
 * If a filename is passed as an argument it'll copy the data as though you hit `CMD+C` via `Finder`, allowing pasting of files (PDFs, archive files, videos etc.) to other programs
 * Has an optional flag to copy the absolute pathname of a file or folder to the clipboard
 * Written in Go, deployed as a multi-arch static binary
+* Works as a drop-in replacement for `pbcopy` since it extends its features
 
 ![gcopy](./gcopy-usage-example.gif)
 
@@ -39,6 +40,14 @@ To install via `brew`
 ```shell
 brew tap theden/gcopy
 brew install gcopy
+```
+
+# Aliasing
+
+`gcopy` can be used as a drop-in replacement for `pbcopy`. To do this, add the `alias` into your `.bashrc` or similar
+
+```shell
+alias pbcopy='gcopy'
 ```
 
 # Usage

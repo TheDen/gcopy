@@ -135,7 +135,7 @@ func main() {
 	parser.Parse(os.Args)
 
 	if *printVersion {
-		fmt.Print("build version: ", version)
+		fmt.Printf("build version: %s", version)
 		os.Exit(0)
 	}
 

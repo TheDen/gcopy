@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"io"
 	"log"
@@ -96,7 +97,6 @@ func runCommand(command string) {
 	defer func() {
 		if r := recover(); r != nil {
 			// Unable to copy the data to clipboard, do nothing
-
 		}
 	}()
 	cmd := exec.Command("osascript", "-e", command)
@@ -113,6 +113,18 @@ func writeTempFile(stdin []byte, fileExtension string) *os.File {
 	_, err = f.Write(stdin)
 	exitOnError(err)
 	return f
+}
+
+func readFromStdinUntilSigEOF() {
+	scanner := bufio.NewScanner(os.Stdin)
+	scanner.Split(bufio.ScanRunes)
+	input := ""
+	for scanner.Scan() {
+		input += scanner.Text()
+		runCommand(fmt.Sprintf("set the clipboard to \"%s\"", input))
+	}
+	err := scanner.Err()
+	exitOnError(err)
 }
 
 func main() {
@@ -144,6 +156,7 @@ func main() {
 	stat, err := os.Stdin.Stat()
 	exitOnError(err)
 	if !fileArg && ((stat.Mode() & os.ModeCharDevice) != 0) {
+		readFromStdinUntilSigEOF()
 		os.Exit(0)
 	}
 

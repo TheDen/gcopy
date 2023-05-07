@@ -7,12 +7,12 @@
 <div align="center">
 
 [![License](https://img.shields.io/github/license/TheDen/gcopy?style=flat-square)](/LICENCE)
-[![GitHub Relase](https://img.shields.io/github/v/release/TheDen/gcopy?style=flat-square)](https://github.com/TheDen/gcopy/releases/latest)
+[![GitHub Release](https://img.shields.io/github/v/release/TheDen/gcopy?style=flat-square)](https://github.com/TheDen/gcopy/releases/latest)
 [![Go Doc](https://img.shields.io/badge/godoc-reference-blue.svg?style=flat-square)](https://pkg.go.dev/github.com/TheDen/gcopy)
 
 </div>
 
-`gcopy` (global copy) is a command line tool that copies data to your clipboard on MacOS. 
+`gcopy` (global copy) is a command line tool that copies data to your clipboard on MacOS.
 
 It does what `pbcopy` does but with some extra features:
 

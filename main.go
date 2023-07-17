@@ -95,8 +95,8 @@ func createCommand(absfileName string, fileClass string, rawData bool) (command 
 
 func runCommand(command string) {
 	defer func() {
+		//lint:ignore SA9003 Unable to copy the data to clipboard, do nothing !
 		if r := recover(); r != nil {
-			// Unable to copy the data to clipboard, do nothing
 		}
 	}()
 	cmd := exec.Command("osascript", "-e", command)

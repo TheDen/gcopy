@@ -20,6 +20,7 @@ gosec:
 
 lint:
 	gofmt -s -w .
+	prettier -w .
 
 clean:
 	go clean

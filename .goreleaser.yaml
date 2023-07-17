@@ -16,8 +16,7 @@ builds:
 universal_binaries:
   - replace: true
 brews:
-  -
-    name: gcopy
+  - name: gcopy
     homepage: "https://github.com/TheDen/gcopy"
     tap:
       owner: TheDen
@@ -29,7 +28,7 @@ changelog:
   sort: asc
   filters:
     exclude:
-      - '^docs:'
-      - '^test:'
+      - "^docs:"
+      - "^test:"
 checksum:
-  name_template: 'checksums.txt'
+  name_template: "checksums.txt"

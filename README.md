@@ -17,7 +17,6 @@
 [![CI status](https://img.shields.io/github/actions/workflow/status/TheDen/gcopy/ci.yaml?branch=main&style=flat-square&logo=github)](https://github.com/TheDen/gcopy/actions?query=branch%3Amain)
 [![License](https://img.shields.io/github/license/TheDen/gcopy?style=flat-square)](/LICENCE)
 
-
 </div>
 
 `gcopy` (global copy) is a command line tool that copies data to your clipboard on MacOS.

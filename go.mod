@@ -1,6 +1,6 @@
 module github.com/TheDen/gcopy
 
-go 1.19
+go 1.20
 
 require github.com/h2non/filetype v1.1.3
 

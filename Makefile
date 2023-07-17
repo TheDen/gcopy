@@ -11,6 +11,16 @@ run:
 
 build_and_run: build run
 
+mod:
+	go mod tidy
+	go mod vendor
+
+gosec:
+	gosec -severity medium ./...
+
+lint:
+	gofmt -s -w .
+
 clean:
 	go clean
 	rm -rf ./bin/*

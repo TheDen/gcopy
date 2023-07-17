@@ -1,3 +1,6 @@
+name: CI
+
+on: push
 jobs:
   misspell:
     name: runner / misspell

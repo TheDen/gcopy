@@ -1,4 +1,8 @@
+<div align="center">
+
 # gcopy
+
+</div>
 
 <p align="center">
   <img alt="copy Logo" src="https://raw.githubusercontent.com/TheDen/gcopy/main/.github/logo.png" />
@@ -6,9 +10,13 @@
 
 <div align="center">
 
+![Go Version](https://img.shields.io/github/go-mod/go-version/TheDen/gcopy?style=flat-square&logo=go)
+[![Go Doc](https://img.shields.io/badge/godoc-reference-blue.svg?style=flat-square&logo=go)](https://pkg.go.dev/github.com/TheDen/gcopy)
+[![Prettier](https://img.shields.io/badge/Prettier-%23F7B93E.svg?style=flat-square&logo=prettier&logoColor=black)](https://github.com/prettier/prettier)
+[![GitHub Release](https://img.shields.io/github/v/release/TheDen/gcopy?style=flat-square&logo=github)](https://github.com/TheDen/gcopy/releases/latest)
+[![CI status](https://img.shields.io/github/actions/workflow/status/TheDen/gcopy/ci.yaml?branch=main&style=flat-square&logo=github)](https://github.com/TheDen/gcopy/actions?query=branch%3Amain)
 [![License](https://img.shields.io/github/license/TheDen/gcopy?style=flat-square)](/LICENCE)
-[![GitHub Release](https://img.shields.io/github/v/release/TheDen/gcopy?style=flat-square)](https://github.com/TheDen/gcopy/releases/latest)
-[![Go Doc](https://img.shields.io/badge/godoc-reference-blue.svg?style=flat-square)](https://pkg.go.dev/github.com/TheDen/gcopy)
+
 
 </div>
 

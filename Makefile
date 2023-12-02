@@ -40,5 +40,3 @@ format:
 clean:
 	go clean
 	rm -rf ./bin/*
-
-

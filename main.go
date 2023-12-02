@@ -84,7 +84,11 @@ func getFileClass(fileContent []byte) (string, string) {
 
 func createCommand(absfileName string, fileClass string, rawData bool) (command string) {
 	if len(fileClass) > 0 {
-		command = fmt.Sprintf("set the clipboard to (read (POSIX file \"%s\") as %s)", absfileName, fileClass)
+		command = fmt.Sprintf(
+			"set the clipboard to (read (POSIX file \"%s\") as %s)",
+			absfileName,
+			fileClass,
+		)
 	} else if rawData {
 		command = fmt.Sprintf("set the clipboard to (read (POSIX file \"%s\"))", absfileName)
 	} else {
@@ -130,7 +134,13 @@ func readFromStdinUntilSigEOF() {
 func main() {
 	parser := argparse.NewParser("gcopy [file] [STDIN]", "gcopy: copy content to the clipboard")
 	printVersion := parser.Flag("v", "version", &argparse.Options{Help: "Current version"})
-	pathName := parser.Flag("p", "path", &argparse.Options{Help: "Copy (and show) the absolute path of a file or folder to the clipboard"})
+	pathName := parser.Flag(
+		"p",
+		"path",
+		&argparse.Options{
+			Help: "Copy (and show) the absolute path of a file or folder to the clipboard",
+		},
+	)
 	var fileName *string = parser.StringPositional(&argparse.Options{Help: "DISABLEDDESCRIPTIONWILLNOTSHOWUP"})
 	parser.Parse(os.Args)
 

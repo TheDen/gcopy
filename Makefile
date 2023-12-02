@@ -15,9 +15,23 @@ build_and_run: build run
 mod:
 	go mod tidy
 	go mod vendor
+	go mod verify
+
+go-update:
+	go list -mod=readonly -m -f '{{if not .Indirect}}{{if not .Main}}{{.Path}}{{end}}{{end}}' all | xargs go get -u
+	$(MAKE) mod
 
 gosec:
 	gosec -severity medium ./...
+
+golines-format:
+	# https://github.com/segmentio/golines
+	@printf "%s\n" "==== Run golines ====="
+	golines --write-output --ignored-dirs=vendor .
+
+go-staticcheck:
+	# https://github.com/dominikh/go-tools
+	staticcheck ./...
 
 format:
 	gofmt -s -w *.go
@@ -26,3 +40,5 @@ format:
 clean:
 	go clean
 	rm -rf ./bin/*
+
+

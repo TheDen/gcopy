@@ -1,0 +1,16 @@
+[default]
+locale = "en-au"
+extend-ignore-words-re = ["PN"]
+
+[files]
+ignore-vcs = true
+extend-exclude = [
+  "vendor",
+  ".git",
+  "*.drawio",
+  "go.mod",
+  "go.sum",
+  "cluster-embedded"
+]
+
+

@@ -1,6 +1,9 @@
 [default]
 locale = "en-au"
-extend-ignore-words-re = ["PN"]
+extend-ignore-words-re = ["PN", "LICENSE", "LICENCE"]
+
+[default.extend-identifiers]
+center = "center"
 
 [files]
 ignore-vcs = true

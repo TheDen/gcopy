@@ -7,9 +7,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Actions Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
       - name: Check for typos
-        uses: crate-ci/typos@master
+        uses: crate-ci/typos@cf5f1c29a8ac336af8568821ec41919923b05a83
         with:
           config: ./.typos.toml
 
@@ -19,9 +19,9 @@ jobs:
     env:
       GO111MODULE: on
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
       - name: Run Gosec Security Scanner
-        uses: securego/gosec@master
+        uses: securego/gosec@64b97151cd7b978abdf8d2f1159a4e9096a12c2b
         with:
           args: -severity medium  ./...
 
@@ -30,12 +30,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
         with:
           ref: ${{ github.head_ref }}
 
       - name: Prettify code
-        uses: creyD/prettier_action@v4.3
+        uses: creyD/prettier_action@31355f8eef017f8aeba2e0bc09d8502b13dbbad1
         with:
           prettier_options: --check .
 
@@ -43,12 +43,12 @@ jobs:
     name: runner / Go package
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
 
       - name: Set up Go
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@40f1582b2485089dde7abd97c1529aa768e1baff
         with:
-          go-version: "1.24"
+          go-version: "1.26"
 
       - name: build
         run: go build *.go
